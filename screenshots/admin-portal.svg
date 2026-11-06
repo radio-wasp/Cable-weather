@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" width="1280" height="760">
+  <rect width="1280" height="760" fill="#050a14"/>
+
+  <!-- Top Header -->
+  <rect x="0" y="0" width="1280" height="64" fill="#146c16"/>
+  <rect x="0" y="61" width="1280" height="3" fill="#6fa3d2"/>
+  <rect x="24" y="14" width="76" height="36" rx="4" fill="#a4bad0" stroke="#182230" stroke-width="2"/>
+  <text x="62" y="38" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="18" fill="#ffffff">CH 12</text>
+  <text x="114" y="32" font-family="Courier New, monospace" font-weight="900" font-size="20" fill="#ffffff">RETRO WEATHER WIRE</text>
+  <text x="114" y="49" font-family="Courier New, monospace" font-size="12" fill="#dbeafe">1980s Multi-Band CRT Character Generator • HLS + IPTV Headend</text>
+
+  <!-- Status Pills -->
+  <g transform="translate(650, 17)" font-family="Courier New, monospace" font-size="12" fill="#f1f5f9">
+    <rect x="0" y="0" width="90" height="30" rx="4" fill="#050a16" stroke="#475569"/>
+    <circle cx="15" cy="15" r="5" fill="#34d058"/>
+    <text x="27" y="19" font-weight="bold">ON AIR</text>
+
+    <rect x="98" y="0" width="155" height="30" rx="4" fill="#050a16" stroke="#475569"/>
+    <text x="108" y="19">RES: <tspan font-weight="bold" fill="#facc15">1280x720@15fps</tspan></text>
+
+    <rect x="261" y="0" width="115" height="30" rx="4" fill="#050a16" stroke="#475569"/>
+    <text x="271" y="19">UNITS: <tspan font-weight="bold" fill="#4ade80">METRIC</tspan></text>
+
+    <rect x="384" y="0" width="150" height="30" rx="4" fill="#050a16" stroke="#475569"/>
+    <text x="394" y="19">AUDIO: <tspan font-weight="bold" fill="#38bdf8">CKUL 96.5 FM</tspan></text>
+
+    <rect x="542" y="0" width="60" height="30" rx="4" fill="#3b1219" stroke="#ef4444"/>
+    <text x="572" y="19" text-anchor="middle" font-weight="bold" fill="#fca5a5">LOCK</text>
+  </g>
+
+  <!-- LEFT CARD: Live CRT Broadcast Monitor -->
+  <rect x="24" y="84" width="560" height="475" rx="6" fill="#0a1428" stroke="#254275"/>
+  <rect x="24" y="84" width="560" height="42" rx="6" fill="#0f1e3a"/>
+  <text x="40" y="110" font-family="Courier New, monospace" font-weight="bold" font-size="14" fill="#facc15">LIVE 1980S CRT BROADCAST MONITOR</text>
+
+  <!-- Mini CRT Display Inside Monitor -->
+  <g transform="translate(40, 140)">
+    <rect width="528" height="297" rx="14" fill="#050608" stroke="#2b3c5a" stroke-width="2"/>
+    <rect x="10" y="8" width="508" height="281" rx="22" fill="#146c16"/>
+    <rect x="10" y="8" width="508" height="44" rx="12" fill="#9cb2ca"/>
+    <text x="264" y="38" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="25" fill="#ffffff" letter-spacing="2">THU DEC  8  10:49:05</text>
+    <rect x="10" y="52" width="508" height="18" fill="#6fa3d2"/>
+    <text x="264" y="65" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="11" fill="#ffffff" letter-spacing="1.5">↓   ENVIRONMENT CANADA WEATHER WIRE   ↓</text>
+    <rect x="10" y="70" width="508" height="62" fill="#146c16"/>
+    <text x="34" y="95" font-family="Courier New, monospace" font-weight="900" font-size="15" fill="#ffffff" xml:space="preserve">HFX   TEMP    FEELS   WIND       HUMID   PRESS</text>
+    <text x="34" y="121" font-family="Courier New, monospace" font-weight="900" font-size="15" fill="#ffffff" xml:space="preserve">OBS   -1.8C   -6.4C   NW 24KPH   78%     101.4KPA</text>
+    <rect x="10" y="132" width="508" height="106" fill="#0826ac"/>
+    <g font-family="Courier New, monospace" font-weight="bold" font-size="11.2" fill="#ffffff">
+      <text x="34" y="149">HALIFAX REGIONAL WEATHER OFFICE BULLETIN:</text>
+      <text x="34" y="164">CURRENT SKY CONDITION IS LIGHT SNOW FLURRIES</text>
+      <text x="34" y="179">WITH TEMPERATURE AT -1.8C (FEELS LIKE -6.4C).</text>
+      <text x="34" y="194">WINDS NW AT 24 KPH. HUMIDITY 78 PCT.</text>
+      <text x="34" y="209">TODAY: SNOW SHOWERS ENDING NEAR NOON. HIGH 0.5C</text>
+      <text x="34" y="224">FRI: MAINLY CLEAR  HI 2.1C / LO -4.0C</text>
+    </g>
+    <rect x="10" y="238" width="508" height="51" rx="12" fill="#146c16"/>
+  </g>
+
+  <!-- Stream Links Grid -->
+  <g transform="translate(40, 452)" font-family="Courier New, monospace" font-size="11">
+    <rect x="0" y="0" width="258" height="42" rx="4" fill="#050b18" stroke="#1e355e"/>
+    <text x="10" y="15" fill="#94a3b8" font-size="9.5">HLS STREAM URL (VLC / SAFARI)</text>
+    <text x="10" y="32" fill="#7dd3fc">http://localhost:8082/hls/stream.m3u8</text>
+
+    <rect x="270" y="0" width="258" height="42" rx="4" fill="#050b18" stroke="#1e355e"/>
+    <text x="280" y="15" fill="#94a3b8" font-size="9.5">IPTV M3U PLAYLIST (CHANNELS)</text>
+    <text x="280" y="32" fill="#7dd3fc">http://localhost:8082/playlist.m3u</text>
+
+    <rect x="0" y="50" width="258" height="42" rx="4" fill="#050b18" stroke="#1e355e"/>
+    <text x="10" y="65" fill="#94a3b8" font-size="9.5">XMLTV GUIDE DATA (EPG)</text>
+    <text x="10" y="82" fill="#7dd3fc">http://localhost:8082/epg.xml</text>
+
+    <rect x="270" y="50" width="258" height="42" rx="4" fill="#050b18" stroke="#1e355e"/>
+    <text x="280" y="65" fill="#94a3b8" font-size="9.5">CONTINUOUS MPEG-TS STREAM</text>
+    <text x="280" y="82" fill="#7dd3fc">http://localhost:8082/live.ts</text>
+  </g>
+
+  <!-- RIGHT CARD: 4-Tab Weather Cities & Radio Console -->
+  <rect x="604" y="84" width="652" height="650" rx="6" fill="#0a1428" stroke="#254275"/>
+  <rect x="604" y="84" width="652" height="44" rx="6" fill="#060d1b"/>
+  <rect x="604" y="125" width="185" height="3" fill="#facc15"/>
+  <g font-family="Courier New, monospace" font-weight="bold" font-size="11.5">
+    <text x="696" y="111" text-anchor="middle" fill="#facc15">1. WEATHER CITIES &amp; RADIO</text>
+    <text x="875" y="111" text-anchor="middle" fill="#94a3b8">2. RESOLUTION &amp; ENCODING</text>
+    <text x="1045" y="111" text-anchor="middle" fill="#94a3b8">3. CRT DISPLAY</text>
+    <text x="1185" y="111" text-anchor="middle" fill="#94a3b8">4. SECURITY</text>
+  </g>
+
+  <g transform="translate(624, 146)" font-family="Courier New, monospace">
+    <text x="0" y="18" font-weight="bold" font-size="14" fill="#facc15">WEATHER OBSERVATION STATIONS (3 / 5)</text>
+    <rect x="380" y="0" width="112" height="26" rx="4" fill="#146c16" stroke="#2fb344"/>
+    <text x="436" y="17" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">METRIC (°C/KPH)</text>
+    <rect x="498" y="0" width="114" height="26" rx="4" fill="#0826ac" stroke="#4f75e8"/>
+    <text x="555" y="17" text-anchor="middle" font-size="11" font-weight="bold" fill="#f1f5f9">IMPERIAL (°F)</text>
+
+    <!-- Station 1 -->
+    <g transform="translate(0, 36)">
+      <rect width="612" height="92" rx="4" fill="#060d1d" stroke="#1d3561"/>
+      <rect width="4" height="92" fill="#34d058"/>
+      <rect x="14" y="10" width="42" height="18" rx="3" fill="#123524" stroke="#22c55e"/>
+      <text x="35" y="23" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">HFX</text>
+      <text x="66" y="23" font-size="13" font-weight="bold" fill="#ffffff">Halifax <tspan fill="#94a3b8" font-size="11">(44.65, -63.57)</tspan></text>
+      <rect x="14" y="34" width="465" height="46" rx="4" fill="#146c16" stroke="#0b2e0c"/>
+      <text x="24" y="53" font-size="11.5" font-weight="bold" fill="#ffffff" xml:space="preserve">HFX   TEMP    FEELS   WIND       HUMID   PRESS</text>
+      <text x="24" y="71" font-size="11.5" font-weight="bold" fill="#ffffff" xml:space="preserve">OBS   -1.8C   -6.4C   NW 24KPH   78%     101.4KPA</text>
+      <rect x="530" y="34" width="68" height="26" rx="4" fill="#3b1219" stroke="#ef4444"/>
+      <text x="564" y="51" text-anchor="middle" font-size="11" font-weight="bold" fill="#fca5a5">REMOVE</text>
+    </g>
+
+    <!-- Station 2 -->
+    <g transform="translate(0, 136)">
+      <rect width="612" height="92" rx="4" fill="#060d1d" stroke="#1d3561"/>
+      <rect width="4" height="92" fill="#34d058"/>
+      <rect x="14" y="10" width="42" height="18" rx="3" fill="#123524" stroke="#22c55e"/>
+      <text x="35" y="23" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">YYT</text>
+      <text x="66" y="23" font-size="13" font-weight="bold" fill="#ffffff">St. John&apos;s <tspan fill="#94a3b8" font-size="11">(47.56, -52.71)</tspan></text>
+      <rect x="14" y="34" width="465" height="46" rx="4" fill="#146c16" stroke="#0b2e0c"/>
+      <text x="24" y="53" font-size="11.5" font-weight="bold" fill="#ffffff" xml:space="preserve">YYT   TEMP    FEELS   WIND       HUMID   PRESS</text>
+      <text x="24" y="71" font-size="11.5" font-weight="bold" fill="#ffffff" xml:space="preserve">OBS   -3.2C   -9.8C   N 34KPH    84%     100.8KPA</text>
+      <rect x="530" y="34" width="68" height="26" rx="4" fill="#3b1219" stroke="#ef4444"/>
+      <text x="564" y="51" text-anchor="middle" font-size="11" font-weight="bold" fill="#fca5a5">REMOVE</text>
+    </g>
+
+    <!-- Add City Box -->
+    <g transform="translate(0, 238)">
+      <rect width="612" height="84" rx="5" fill="#050b18" stroke="#1d3561"/>
+      <text x="12" y="20" font-size="11" font-weight="bold" fill="#facc15">+ ADD WEATHER CITY (UP TO 5) — AUTO-GEOCODES BY CITY NAME</text>
+      <rect x="12" y="30" width="380" height="36" rx="4" fill="#040914" stroke="#28467a"/>
+      <text x="22" y="53" font-size="12" fill="#94a3b8">e.g. Charlottetown, Toronto, Boston...</text>
+      <rect x="404" y="30" width="196" height="36" rx="4" fill="#facc15"/>
+      <text x="502" y="53" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#090d16">+ LOOKUP &amp; ADD CITY</text>
+    </g>
+
+    <!-- Radio Presets Section -->
+    <g transform="translate(0, 342)">
+      <text x="0" y="16" font-weight="bold" font-size="14" fill="#facc15">BACKGROUND RADIO STATION PRESETS</text>
+      <rect x="0" y="28" width="612" height="54" rx="4" fill="#0c2918" stroke="#34d058"/>
+      <rect x="12" y="42" width="54" height="20" rx="3" fill="#14532d" stroke="#22c55e"/>
+      <text x="39" y="56" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#4ade80">ON AIR</text>
+      <text x="76" y="54" font-size="13" font-weight="bold" fill="#ffffff">CKUL 96.5 FM (Halifax Radio)</text>
+      <text x="76" y="71" font-size="11" fill="#94a3b8">https://chi-master3-entry1.leanstream-hd.com:2113/CKULFM</text>
+
+      <rect x="0" y="90" width="612" height="54" rx="4" fill="#060d1d" stroke="#1d3561"/>
+      <text x="16" y="114" font-size="13" font-weight="bold" fill="#ffffff">Ambient Weather Synth Chimes</text>
+      <text x="16" y="131" font-size="11" fill="#94a3b8">Built-in fallback synthesizer audio</text>
+      <rect x="516" y="103" width="82" height="28" rx="4" fill="#facc15"/>
+      <text x="557" y="121" text-anchor="middle" font-size="11" font-weight="bold" fill="#090d16">TUNE IN</text>
+    </g>
+  </g>
+</svg>

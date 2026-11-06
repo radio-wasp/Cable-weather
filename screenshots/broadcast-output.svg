@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="steelTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#aec2d7"/>
+      <stop offset="50%" stop-color="#9cb2ca"/>
+      <stop offset="100%" stop-color="#88a0ba"/>
+    </linearGradient>
+    <linearGradient id="skyStrip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7eb0de"/>
+      <stop offset="100%" stop-color="#6194c4"/>
+    </linearGradient>
+    <linearGradient id="greenBand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#177719"/>
+      <stop offset="50%" stop-color="#146c16"/>
+      <stop offset="100%" stop-color="#105c12"/>
+    </linearGradient>
+    <linearGradient id="blueBand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a2cc2"/>
+      <stop offset="50%" stop-color="#0826ac"/>
+      <stop offset="100%" stop-color="#061d90"/>
+    </linearGradient>
+    <pattern id="scanlines" width="1280" height="4" patternUnits="userSpaceOnUse">
+      <rect width="1280" height="2" y="0" fill="rgba(255,255,255,0.03)"/>
+      <rect width="1280" height="2" y="2" fill="rgba(0,0,0,0.28)"/>
+    </pattern>
+    <clipPath id="crtClip">
+      <rect x="26" y="18" width="1228" height="684" rx="58" ry="58"/>
+    </clipPath>
+  </defs>
+
+  <!-- Outer Black CRT Monitor Bezel -->
+  <rect width="1280" height="720" fill="#050608"/>
+  <rect x="18" y="12" width="1244" height="696" rx="64" ry="64" fill="#0d1015" stroke="#1e242d" stroke-width="4"/>
+
+  <g clip-path="url(#crtClip)">
+    <!-- BAND 1: Top Pale Steel-Blue / Silver-Grey Clock Header (y=0..108) -->
+    <rect x="0" y="0" width="1280" height="108" fill="url(#steelTop)"/>
+
+    <!-- Tall Condensed 1980s Clock Text -->
+    <g transform="translate(150, 86) scale(0.82, 1.48)">
+      <text x="5" y="4" font-family="Courier New, monospace" font-weight="900" font-size="64" fill="#182230" letter-spacing="4">THU DEC  8  10:49:05</text>
+      <text x="0" y="0" font-family="Courier New, monospace" font-weight="900" font-size="64" fill="#f8fbff" letter-spacing="4">THU DEC  8  10:49:05</text>
+    </g>
+
+    <!-- Horizontal Divider Rule -->
+    <rect x="0" y="108" width="1280" height="4" fill="#1b2638"/>
+
+    <!-- BAND 2: Thin Sky-Blue Sub-Header Wire Strip (y=112..152) -->
+    <rect x="0" y="112" width="1280" height="40" fill="url(#skyStrip)"/>
+    <text x="643" y="140" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="25" fill="#131f33" letter-spacing="3">↓     ENVIRONMENT CANADA WEATHER WIRE     ↓</text>
+    <text x="640" y="138" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="25" fill="#f8fbff" letter-spacing="3">↓     ENVIRONMENT CANADA WEATHER WIRE     ↓</text>
+
+    <!-- Horizontal Divider Rule -->
+    <rect x="0" y="152" width="1280" height="4" fill="#0a240c"/>
+
+    <!-- BAND 3: Upper Forest-Green 2-Row Telemetry Band (y=156..306) -->
+    <rect x="0" y="156" width="1280" height="150" fill="url(#greenBand)"/>
+    <g transform="translate(88, 214) scale(0.76, 1.38)">
+      <text x="4" y="3" font-family="Courier New, monospace" font-weight="900" font-size="44" fill="#062208" letter-spacing="2" xml:space="preserve">HFX   TEMP    FEELS   WIND       HUMID   PRESS</text>
+      <text x="0" y="0" font-family="Courier New, monospace" font-weight="900" font-size="44" fill="#f5fff5" letter-spacing="2" xml:space="preserve">HFX   TEMP    FEELS   WIND       HUMID   PRESS</text>
+    </g>
+    <g transform="translate(88, 286) scale(0.76, 1.38)">
+      <text x="4" y="3" font-family="Courier New, monospace" font-weight="900" font-size="44" fill="#062208" letter-spacing="2" xml:space="preserve">OBS   -1.8C   -6.4C   NW 24KPH   78%     101.4KPA</text>
+      <text x="0" y="0" font-family="Courier New, monospace" font-weight="900" font-size="44" fill="#f5fff5" letter-spacing="2" xml:space="preserve">OBS   -1.8C   -6.4C   NW 24KPH   78%     101.4KPA</text>
+    </g>
+
+    <!-- Horizontal Divider Rule -->
+    <rect x="0" y="306" width="1280" height="4" fill="#04103a"/>
+
+    <!-- BAND 4: Center Deep Royal-Blue 8-Line Forecast Band (y=310..568) -->
+    <rect x="0" y="310" width="1280" height="258" fill="url(#blueBand)"/>
+    <g font-family="Courier New, monospace" font-weight="900" font-size="27" letter-spacing="1.6">
+      <text x="77" y="343" fill="#030a30" xml:space="preserve">HALIFAX REGIONAL WEATHER OFFICE BULLETIN:</text>
+      <text x="74" y="340" fill="#f6f9ff" xml:space="preserve">HALIFAX REGIONAL WEATHER OFFICE BULLETIN:</text>
+
+      <text x="77" y="374" fill="#030a30" xml:space="preserve">CURRENT SKY CONDITION IS LIGHT SNOW FLURRIES</text>
+      <text x="74" y="371" fill="#f6f9ff" xml:space="preserve">CURRENT SKY CONDITION IS LIGHT SNOW FLURRIES</text>
+
+      <text x="77" y="405" fill="#030a30" xml:space="preserve">WITH TEMPERATURE AT -1.8C (FEELS LIKE -6.4C).</text>
+      <text x="74" y="402" fill="#f6f9ff" xml:space="preserve">WITH TEMPERATURE AT -1.8C (FEELS LIKE -6.4C).</text>
+
+      <text x="77" y="436" fill="#030a30" xml:space="preserve">WINDS NW AT 24 KPH GUSTING TO 38 KPH.</text>
+      <text x="74" y="433" fill="#f6f9ff" xml:space="preserve">WINDS NW AT 24 KPH GUSTING TO 38 KPH.</text>
+
+      <text x="77" y="467" fill="#030a30" xml:space="preserve">HUMIDITY 78 PCT. BAROMETER 101.4 KPA STEADY.</text>
+      <text x="74" y="464" fill="#f6f9ff" xml:space="preserve">HUMIDITY 78 PCT. BAROMETER 101.4 KPA STEADY.</text>
+
+      <text x="77" y="498" fill="#030a30" xml:space="preserve">TODAY: SNOW SHOWERS ENDING NEAR NOON. HIGH 0.5C</text>
+      <text x="74" y="495" fill="#f6f9ff" xml:space="preserve">TODAY: SNOW SHOWERS ENDING NEAR NOON. HIGH 0.5C</text>
+
+      <text x="77" y="529" fill="#030a30" xml:space="preserve">LOW -5.2C. PRECIP PROBABILITY 70 PERCENT.</text>
+      <text x="74" y="526" fill="#f6f9ff" xml:space="preserve">LOW -5.2C. PRECIP PROBABILITY 70 PERCENT.</text>
+
+      <text x="77" y="560" fill="#030a30" xml:space="preserve">FRI: MAINLY CLEAR  HI 2.1C / LO -4.0C</text>
+      <text x="74" y="557" fill="#f6f9ff" xml:space="preserve">FRI: MAINLY CLEAR  HI 2.1C / LO -4.0C</text>
+    </g>
+
+    <!-- Horizontal Divider Rule -->
+    <rect x="0" y="568" width="1280" height="4" fill="#062208"/>
+
+    <!-- BAND 5: Lower Forest-Green Band (y=572..720) -->
+    <rect x="0" y="572" width="1280" height="148" fill="url(#greenBand)"/>
+
+    <!-- Full-Screen CRT Scanlines Overlay -->
+    <rect width="1280" height="720" fill="url(#scanlines)"/>
+  </g>
+
+  <!-- Inner CRT Screen Bezel Rim -->
+  <rect x="26" y="18" width="1228" height="684" rx="58" ry="58" fill="none" stroke="#030406" stroke-width="10"/>
+</svg>

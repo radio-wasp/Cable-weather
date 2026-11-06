@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.git/
+.DS_Store
+data/
+screenshots/

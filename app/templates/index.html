@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ch {{ channel_number }} - {{ channel_name }} | 1980s CRT Weather Control Room</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    :root {
+      --bg: #050a14;
+      --panel: #0a1428;
+      --panel-alt: #0f1e3a;
+      --border: #254275;
+      --steel-top: #a2b8ce;
+      --sky-strip: #6fa3d2;
+      --crt-green: #146c16;
+      --crt-green-bright: #34d058;
+      --crt-blue: #0826ac;
+      --accent: #38bdf8;
+      --gold: #facc15;
+      --danger: #ef4444;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #102042 0%, #040811 75%);
+      color: var(--text);
+      font-family: "Courier New", Courier, monospace;
+      min-height: 100vh;
+    }
+
+    /* LOGIN MODAL OVERLAY */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 16, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-Overlay-hidden {
+      display: none !important;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 450px;
+      background: linear-gradient(180deg, #0c1933 0%, #071022 100%);
+      border: 2px solid var(--sky-strip);
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(20, 108, 22, 0.35);
+      overflow: hidden;
+    }
+
+    .login-header {
+      background: linear-gradient(180deg, #a6bcd2 0%, #839cb6 100%);
+      padding: 14px 20px;
+      border-bottom: 3px solid #182232;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #151d2a;
+    }
+
+    .login-header h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .login-substrip {
+      background: #146c16;
+      color: #ffffff;
+      text-shadow: 1px 1px 0 #072808;
+      padding: 6px 20px;
+      font-size: 0.76rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-align: center;
+      border-bottom: 2px solid #091e0a;
+    }
+
+    .login-body {
+      padding: 22px 20px;
+    }
+
+    .login-body p {
+      margin: 0 0 16px 0;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .login-error {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+      padding: 9px 12px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0b1830 0%, #146c16 55%, #0826ac 100%);
+      border-bottom: 3px solid var(--sky-strip);
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ch-badge {
+      background: #a4bad0;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #182230;
+      font-weight: 900;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 2px solid #182230;
+      font-size: 1.05rem;
+      letter-spacing: 1px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #040814;
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+    }
+
+    .pill {
+      background: rgba(5, 10, 22, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 6px 11px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--crt-green-bright);
+      box-shadow: 0 0 8px var(--crt-green-bright);
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 20px auto;
+      padding: 0 20px 40px;
+      display: grid;
+      grid-template-columns: 1.08fr 1.22fr;
+      gap: 22px;
+    }
+
+    @media (max-width: 1080px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      background: var(--panel-alt);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 0.96rem;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--gold);
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .monitor-frame {
+      position: relative;
+      background: #000;
+      border: 3px solid #2b3c5a;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
+    }
+
+    video, #snapshotPreview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+
+    .monitor-controls {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .link-box {
+      background: #050b18;
+      border: 1px solid #1e355e;
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+    }
+
+    .link-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.7rem;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+
+    .link-box code {
+      color: #7dd3fc;
+      word-break: break-all;
+    }
+
+    /* TABS */
+    .tabs-nav {
+      display: flex;
+      background: #060d1b;
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      border-bottom: 3px solid transparent;
+      padding: 12px 10px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: rgba(250, 204, 21, 0.08);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    button {
+      background: var(--crt-blue);
+      color: var(--text);
+      border: 1px solid #4f75e8;
+      padding: 8px 13px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      transition: all 0.15s;
+    }
+
+    button:hover { background: #1939c2; }
+    button.green { background: var(--crt-green); border-color: #2fb344; color: #fff; }
+    button.green:hover { background: #1b851e; }
+    button.gold { background: var(--gold); color: #090d16; border-color: var(--gold); }
+    button.gold:hover { background: #eab308; }
+    button.danger { background: rgba(239, 68, 68, 0.18); border-color: var(--danger); color: #fca5a5; }
+    button.danger:hover { background: var(--danger); color: #fff; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr 0.8fr 0.8fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+      letter-spacing: 0.7px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="number"],
+    input[type="password"],
+    select {
+      width: 100%;
+      background: #040914;
+      border: 1px solid #28467a;
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.84rem;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .item-row {
+      background: #060d1d;
+      border: 1px solid #1d3561;
+      border-radius: 4px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .item-row.active-station {
+      border-color: var(--crt-green-bright);
+      background: rgba(20, 108, 22, 0.22);
+    }
+
+    .item-row.city-row {
+      border-left: 4px solid var(--crt-green-bright);
+    }
+
+    .item-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .item-title {
+      font-weight: bold;
+      font-size: 0.88rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .item-url {
+      font-size: 0.74rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 3px;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .badge-green { background: rgba(52, 208, 88, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+    .badge-gold { background: rgba(250, 204, 21, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+    .badge-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #0284c7; }
+    .badge-muted { background: rgba(148, 163, 184, 0.15); color: var(--muted); }
+
+    /* GREEN TELEMETRY MINI-PREVIEW */
+    .crt-telemetry-preview {
+      background: #146c16;
+      border: 2px solid #0b2e0c;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-top: 6px;
+      font-family: "Courier New", Courier, monospace;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #072208;
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .preset-card {
+      background: #060e1f;
+      border: 1px solid #254275;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+
+    .preset-card:hover {
+      border-color: var(--accent);
+      background: #0c1936;
+    }
+
+    .preset-card.selected {
+      border-color: var(--gold);
+      background: rgba(250, 204, 21, 0.12);
+    }
+
+    .preset-card strong {
+      display: block;
+      font-size: 0.83rem;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .preset-card span {
+      display: block;
+      font-size: 0.71rem;
+      color: var(--muted);
+    }
+
+    .bandwidth-box {
+      background: #050b18;
+      border: 1px solid #1e3a6d;
+      border-radius: 5px;
+      padding: 12px;
+      margin: 12px 0;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0b1830;
+      border: 2px solid var(--gold);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75);
+      font-size: 0.84rem;
+      display: none;
+      z-index: 10000;
+    }
+
+    .section-divider {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 18px 0;
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .checkbox-row label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text);
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- OPERATOR LOGIN PROMPT -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+      <div class="login-header">
+        <h2>CH {{ channel_number }} WEATHER TERMINAL</h2>
+        <span class="badge badge-gold">LOCKED</span>
+      </div>
+      <div class="login-substrip">
+        ↓ ENVIRONMENT CANADA / RETRO CRT HEADEND ↓
+      </div>
+      <div class="login-body">
+        <p>Enter operator credentials to unlock the 1980s CRT Weather Wire headend, city telemetry table, radio presets, and encoder settings.</p>
+        <div id="loginError" class="login-error">Invalid username or password.</div>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Operator Username</label>
+            <input type="text" id="loginUsername" value="admin" required autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="green" style="width: 100%; padding: 11px; margin-top: 6px;">
+            UNLOCK WEATHER HEADEND
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="ch-badge">CH {{ channel_number }}</div>
+      <div>
+        <h1>{{ channel_name }}</h1>
+        <div style="font-size: 0.75rem; color: #dbeafe;">1980s Multi-Band CRT Character Generator • HLS + IPTV Headend</div>
+      </div>
+    </div>
+    <div class="status-bar">
+      <div class="pill"><span class="dot"></span> <span id="encStatus">ON AIR</span></div>
+      <div class="pill">RES: <strong id="hdrRes">--</strong></div>
+      <div class="pill">UNITS: <strong id="hdrUnits">METRIC</strong></div>
+      <div class="pill">CITIES: <strong id="hdrCities">0/5</strong></div>
+      <div class="pill">AUDIO: <strong id="hdrRadio">Loading...</strong></div>
+      <button id="logoutBtn" class="danger" onclick="handleLogout()" style="padding: 5px 10px; font-size: 0.74rem;">LOCK</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- LEFT COLUMN: LIVE CRT MONITOR & STREAM LINKS -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h2>Live 1980s CRT Broadcast Monitor</h2>
+          <div style="display:flex; gap:6px;">
+            <button onclick="switchMonitorMode('hls')" id="btnModeHls" class="gold">HLS Video + Audio</button>
+            <button onclick="switchMonitorMode('png')" id="btnModePng">CRT Frame Preview</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="monitor-frame">
+            <video id="hlsVideo" controls autoplay muted playsinline></video>
+            <img id="snapshotPreview" src="/preview.png" alt="Live CRT Weather Preview" style="display:none;" />
+          </div>
+
+          <div class="monitor-controls">
+            <div style="font-size: 0.78rem; color: var(--muted);">
+              Unmute the video player to hear the active background radio feed.
+            </div>
+            <button onclick="forceRefreshWeather()" class="green">Force Weather Poll Now</button>
+          </div>
+
+          <div class="links-grid">
+            <div class="link-box">
+              <span>HLS Stream URL (VLC / Safari / OBS)</span>
+              <code id="urlHls">/hls/stream.m3u8</code>
+            </div>
+            <div class="link-box">
+              <span>IPTV M3U Playlist ( channels.m3u )</span>
+              <code id="urlM3u">/playlist.m3u</code>
+            </div>
+            <div class="link-box">
+              <span>XMLTV Guide Data ( EPG )</span>
+              <code id="urlEpg">/epg.xml</code>
+            </div>
+            <div class="link-box">
+              <span>Continuous MPEG-TS Stream</span>
+              <code id="urlTs">/live.ts</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE WEATHER WIRE PAGE PREVIEW -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Active CRT Weather Wire Pages (<span id="pageCount">0</span>)</h2>
+        </div>
+        <div class="card-body">
+          <div id="livePagesList" class="item-list" style="max-height: 290px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: 4-TAB ADMIN CONSOLE -->
+    <div>
+      <div class="card">
+        <div class="tabs-nav">
+          <button class="tab-btn active" onclick="openTab('tabWeather', this)">1. Weather Cities & Radio</button>
+          <button class="tab-btn" onclick="openTab('tabVideo', this)">2. Resolution & Encoding</button>
+          <button class="tab-btn" onclick="openTab('tabDisplay', this)">3. CRT & Band Display</button>
+          <button class="tab-btn" onclick="openTab('tabSecurity', this)">4. Login & Security</button>
+        </div>
+
+        <div class="card-body">
+          <!-- TAB 1: WEATHER CITIES, UNITS, ALERTS & RADIO -->
+          <div id="tabWeather" class="tab-pane active">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+              <div>
+                <h3 style="margin:0; font-size:0.92rem; color:var(--gold); text-transform:uppercase;">
+                  Weather Observation Stations (<span id="locCountBadge">0 / 5</span>)
+                </h3>
+                <div style="font-size:0.75rem; color:var(--muted); margin-top:2px;">
+                  Polled live from Open-Meteo (no API key needed). Cycles Upper Green Telemetry Band + Royal-Blue Forecast Band.
+                </div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button id="btnUnitMetric" onclick="setUnits('metric')" class="green">Metric (°C / KPH / KPA)</button>
+                <button id="btnUnitImperial" onclick="setUnits('imperial')">Imperial (°F / MPH / INHG)</button>
+              </div>
+            </div>
+
+            <div id="locationsList" class="item-list"></div>
+
+            <form id="addLocationForm" onsubmit="addLocation(event)" style="background:#050b18; border:1px solid #1d3561; padding:12px; border-radius:5px; margin-bottom:18px;">
+              <div style="font-size: 0.76rem; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; font-weight: bold;">
+                + Add Weather City (Up to {{ max_locations }}) — Auto-Geocodes by City Name
+              </div>
+              <div class="form-row-3">
+                <div>
+                  <label>City Name (e.g. Toronto, Boston, Winnipeg)</label>
+                  <input type="text" id="locName" placeholder="e.g. Charlottetown" required />
+                </div>
+                <div>
+                  <label>3-Char Code (Optional)</label>
+                  <input type="text" id="locCode" placeholder="YYG" maxlength="6" />
+                </div>
+                <div>
+                  <label>Latitude (Opt)</label>
+                  <input type="number" step="any" id="locLat" placeholder="Auto" />
+                </div>
+                <div>
+                  <label>Longitude (Opt)</label>
+                  <input type="number" step="any" id="locLon" placeholder="Auto" />
+                </div>
+              </div>
+              <button type="submit" class="gold">+ Lookup & Add Weather Station</button>
+            </form>
+
+            <hr class="section-divider" />
+
+            <!-- RADIO STATION TUNER -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h3 style="margin:0; font-size:0.92rem; color:var(--gold); text-transform:uppercase;">
+                Background Radio Station Presets
+              </h3>
+              <span class="badge badge-green">Switches Live Audio</span>
+            </div>
+
+            <div id="radioList" class="item-list"></div>
+
+            <form id="addRadioForm" onsubmit="addRadioPreset(event)" style="background:#050b18; border:1px solid #1d3561; padding:12px; border-radius:5px; margin-bottom:18px;">
+              <div style="font-size: 0.76rem; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; font-weight: bold;">
+                + Add Radio Station Stream Preset
+              </div>
+              <div class="form-row">
+                <div>
+                  <label>Station Call Sign / Name</label>
+                  <input type="text" id="radioName" placeholder="e.g. NOAA Weather Radio / CKUL FM" required />
+                </div>
+                <div>
+                  <label>Genre / Tag</label>
+                  <input type="text" id="radioGenre" placeholder="e.g. Weather / Classic Hits" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Direct Audio Stream URL (Icecast / Shoutcast / MP3 / AAC / M3U8)</label>
+                <input type="url" id="radioUrl" placeholder="https://..." required />
+              </div>
+              <button type="submit" class="gold">+ Add Radio Preset</button>
+            </form>
+
+            <hr class="section-divider" />
+
+            <!-- OPTIONAL WEATHER ALERT RSS FEEDS -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.88rem; color:var(--accent); text-transform:uppercase;">
+                Optional Weather Alert / Bulletin RSS Feeds (<span id="feedCountBadge">0 / 5</span>)
+              </h3>
+            </div>
+            <div id="feedsList" class="item-list"></div>
+            <form onsubmit="addFeed(event)" style="background:#050b18; border:1px solid #1d3561; padding:10px; border-radius:5px;">
+              <div class="form-row">
+                <div>
+                  <label>Alert Feed Label (max 6 chars)</label>
+                  <input type="text" id="feedName" placeholder="ALERT" maxlength="10" required />
+                </div>
+                <div>
+                  <label>RSS / Atom Feed URL</label>
+                  <input type="url" id="feedUrl" placeholder="https://weather.gc.ca/rss/..." required />
+                </div>
+              </div>
+              <button type="submit">+ Add Weather Alert RSS</button>
+            </form>
+          </div>
+
+          <!-- TAB 2: RESOLUTION & ENCODING -->
+          <div id="tabVideo" class="tab-pane">
+            <h3 style="margin:0 0 10px 0; font-size:0.92rem; color:var(--gold); text-transform:uppercase;">
+              Broadcast Resolution & Framerate Presets
+            </h3>
+            <div class="preset-grid" id="videoPresetGrid">
+              <div class="preset-card" onclick="applyVideoPreset('1080p', 1920, 1080, 15, '1800k')">
+                <strong>1080p Full HD</strong>
+                <span>1920×1080 • 15 fps • 1800k</span>
+              </div>
+              <div class="preset-card" onclick="applyVideoPreset('720p', 1280, 720, 15, '1100k')">
+                <strong>720p HD (Default)</strong>
+                <span>1280×720 • 15 fps • 1100k</span>
+              </div>
+              <div class="preset-card" onclick="applyVideoPreset('540p', 960, 540, 10, '600k')">
+                <strong>540p Cloud Saver</strong>
+                <span>960×540 • 10 fps • 600k</span>
+              </div>
+              <div class="preset-card" onclick="applyVideoPreset('480p', 854, 480, 10, '450k')">
+                <strong>480p SD</strong>
+                <span>854×480 • 10 fps • 450k</span>
+              </div>
+              <div class="preset-card" onclick="applyVideoPreset('480i_4x3', 640, 480, 10, '400k')">
+                <strong>480i 4:3 CRT</strong>
+                <span>640×480 (4:3) • 10 fps • 400k</span>
+              </div>
+            </div>
+
+            <form onsubmit="saveVideoSettings(event)">
+              <input type="hidden" id="vidPreset" value="720p" />
+              <div class="form-row">
+                <div>
+                  <label>Width (px, even number)</label>
+                  <input type="number" id="vidWidth" min="320" max="1920" step="2" oninput="updateBandwidthEstimate()" required />
+                </div>
+                <div>
+                  <label>Height (px, even number)</label>
+                  <input type="number" id="vidHeight" min="240" max="1080" step="2" oninput="updateBandwidthEstimate()" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div>
+                  <label>Frame Rate (FPS)</label>
+                  <select id="vidFps" onchange="updateBandwidthEstimate()">
+                    <option value="5">5 fps (Ultra-Low CPU)</option>
+                    <option value="10">10 fps (Authentic 80s Character Gen)</option>
+                    <option value="12">12 fps</option>
+                    <option value="15">15 fps (Default Smooth)</option>
+                    <option value="24">24 fps</option>
+                    <option value="30">30 fps (60Hz NTSC Feel)</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Target Video Bitrate</label>
+                  <select id="vidBitrate" onchange="updateBandwidthEstimate()">
+                    <option value="350k">350 kbps (Ultra-Low Egress)</option>
+                    <option value="400k">400 kbps (4:3 CRT Saver)</option>
+                    <option value="450k">450 kbps (SD Saver)</option>
+                    <option value="600k">600 kbps (540p Saver)</option>
+                    <option value="800k">800 kbps (720p Light)</option>
+                    <option value="1100k">1100 kbps (720p Standard)</option>
+                    <option value="1500k">1500 kbps (720p High)</option>
+                    <option value="1800k">1800 kbps (1080p Standard)</option>
+                    <option value="2500k">2500 kbps (1080p High)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="bandwidth-box" id="bandwidthEstimateBox">
+                Calculating stream footprint...
+              </div>
+
+              <button type="submit" class="gold">Apply Resolution & Restart FFmpeg Encoder</button>
+            </form>
+          </div>
+
+          <!-- TAB 3: CRT & BAND DISPLAY -->
+          <div id="tabDisplay" class="tab-pane">
+            <h3 style="margin:0 0 10px 0; font-size:0.92rem; color:var(--gold); text-transform:uppercase;">
+              1980s Multi-Band CRT Character Generator Settings
+            </h3>
+            <form onsubmit="saveDisplaySettings(event)">
+              <div class="form-row">
+                <div>
+                  <label>Channel Name (EPG / M3U)</label>
+                  <input type="text" id="dispChannelName" required />
+                </div>
+                <div>
+                  <label>Channel Number</label>
+                  <input type="text" id="dispChannelNum" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Sky-Blue Sub-Header Wire Banner (Between Arrows ↓ ... ↓)</label>
+                <input type="text" id="dispSubheader" placeholder="ENVIRONMENT CANADA WEATHER WIRE" required />
+              </div>
+              <div class="form-group">
+                <label>Lower Forest-Green Band Footer Text (Leave blank for authentic solid green band)</label>
+                <input type="text" id="dispFooter" placeholder="(Blank matches original 1980s CRT photo)" />
+              </div>
+              <div class="form-row">
+                <div>
+                  <label>Page Hold Duration (sec)</label>
+                  <input type="number" id="dispPageDur" min="6" max="120" required />
+                </div>
+                <div>
+                  <label>Teletype Reveal Duration (sec)</label>
+                  <input type="number" id="dispTypeDur" min="0" max="30" required />
+                </div>
+              </div>
+
+              <div class="checkbox-row">
+                <label>
+                  <input type="checkbox" id="dispBezel" checked />
+                  Curved CRT Monitor Bezel
+                </label>
+                <label>
+                  <input type="checkbox" id="dispScanlines" checked />
+                  Horizontal CRT Scanlines
+                </label>
+                <label>
+                  <input type="checkbox" id="dispNoise" checked />
+                  Analog RF Signal Grain
+                </label>
+              </div>
+
+              <button type="submit" class="gold">Save CRT & Band Display Settings</button>
+            </form>
+          </div>
+
+          <!-- TAB 4: LOGIN & SECURITY -->
+          <div id="tabSecurity" class="tab-pane">
+            <h3 style="margin:0 0 10px 0; font-size:0.92rem; color:var(--gold); text-transform:uppercase;">
+              Operator Login Credentials
+            </h3>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:0;">
+              Update the operator username and password required to unlock this Admin Portal. HLS/MPEG-TS/M3U stream endpoints remain accessible to your media players.
+            </p>
+            <form onsubmit="saveCredentials(event)">
+              <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" id="secCurrentPass" required autocomplete="current-password" />
+              </div>
+              <div class="form-group">
+                <label>New Operator Username</label>
+                <input type="text" id="secNewUser" required autocomplete="username" />
+              </div>
+              <div class="form-group">
+                <label>New Password (minimum 4 characters)</label>
+                <input type="password" id="secNewPass" required autocomplete="new-password" />
+              </div>
+              <button type="submit" class="gold">Update Operator Password</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let hlsPlayer = null;
+    let pngTimer = null;
+    let currentState = null;
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3400);
+    }
+
+    function openTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+    }
+
+    function populateStreamUrls() {
+      const origin = window.location.origin;
+      document.getElementById('urlHls').textContent = `${origin}/hls/stream.m3u8`;
+      document.getElementById('urlM3u').textContent = `${origin}/playlist.m3u`;
+      document.getElementById('urlEpg').textContent = `${origin}/epg.xml`;
+      document.getElementById('urlTs').textContent = `${origin}/live.ts`;
+    }
+
+    function initHlsMonitor() {
+      const video = document.getElementById('hlsVideo');
+      const src = '/hls/stream.m3u8';
+      if (Hls.isSupported()) {
+        if (hlsPlayer) hlsPlayer.destroy();
+        hlsPlayer = new Hls({ lowLatencyMode: true, backBufferLength: 30 });
+        hlsPlayer.loadSource(src);
+        hlsPlayer.attachMedia(video);
+        hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {});
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+        video.play().catch(() => {});
+      }
+    }
+
+    function switchMonitorMode(mode) {
+      const video = document.getElementById('hlsVideo');
+      const img = document.getElementById('snapshotPreview');
+      const btnHls = document.getElementById('btnModeHls');
+      const btnPng = document.getElementById('btnModePng');
+
+      if (mode === 'png') {
+        video.style.display = 'none';
+        img.style.display = 'block';
+        btnPng.classList.add('gold');
+        btnHls.classList.remove('gold');
+        img.src = '/preview.png?t=' + Date.now();
+        if (pngTimer) clearInterval(pngTimer);
+        pngTimer = setInterval(() => {
+          img.src = '/preview.png?t=' + Date.now();
+        }, 1200);
+      } else {
+        if (pngTimer) clearInterval(pngTimer);
+        img.style.display = 'none';
+        video.style.display = 'block';
+        btnHls.classList.add('gold');
+        btnPng.classList.remove('gold');
+        initHlsMonitor();
+      }
+    }
+
+    async function checkAuthAndLoad() {
+      const res = await fetch('/api/auth/status');
+      const data = await res.json();
+      const overlay = document.getElementById('loginOverlay');
+      if (!data.authenticated) {
+        overlay.classList.remove('login-Overlay-hidden');
+        if (data.username) {
+          document.getElementById('loginUsername').value = data.username;
+        }
+        return;
+      }
+      overlay.classList.add('login-Overlay-hidden');
+      document.getElementById('secNewUser').value = data.username || 'admin';
+      await loadState();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const errEl = document.getElementById('loginError');
+      errEl.style.display = 'none';
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        errEl.textContent = err.detail || 'Login failed';
+        errEl.style.display = 'block';
+        return;
+      }
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginOverlay').classList.add('login-Overlay-hidden');
+      showToast('Operator console unlocked');
+      await loadState();
+    }
+
+    async function handleLogout() {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      document.getElementById('loginOverlay').classList.remove('login-Overlay-hidden');
+    }
+
+    async function loadState() {
+      const res = await fetch('/api/state');
+      if (res.status === 401) {
+        document.getElementById('loginOverlay').classList.remove('login-Overlay-hidden');
+        return;
+      }
+      const data = await res.json();
+      currentState = data;
+      renderState(data);
+    }
+
+    function renderState(data) {
+      const s = data.settings;
+      const units = s.units || 'metric';
+      document.getElementById('hdrUnits').textContent = units.toUpperCase();
+      document.getElementById('btnUnitMetric').className = units === 'metric' ? 'green' : '';
+      document.getElementById('btnUnitImperial').className = units === 'imperial' ? 'green' : '';
+
+      const locs = s.weather_locations || [];
+      document.getElementById('hdrCities').textContent = `${locs.length}/${data.max_locations}`;
+      document.getElementById('locCountBadge').textContent = `${locs.length} / ${data.max_locations}`;
+
+      const v = s.video || { width: 1280, height: 720, fps: 15, video_bitrate: '1100k', preset: '720p' };
+      document.getElementById('hdrRes').textContent = `${v.width}x${v.height}@${v.fps}fps`;
+
+      const activePreset = (s.radio_presets || []).find(p => p.id === s.active_radio_id);
+      document.getElementById('hdrRadio').textContent = activePreset ? activePreset.name : 'Synthesizer Tone';
+
+      // Render Weather Cities
+      const locContainer = document.getElementById('locationsList');
+      locContainer.innerHTML = '';
+      const pagesByCity = {};
+      (data.pages || []).forEach(p => {
+        if (!pagesByCity[p.station_code]) pagesByCity[p.station_code] = p;
+      });
+
+      locs.forEach(loc => {
+        const samplePage = pagesByCity[loc.code];
+        const row = document.createElement('div');
+        row.className = 'item-row city-row';
+        row.innerHTML = `
+          <div class="item-info">
+            <div class="item-title">
+              <span class="badge ${loc.enabled ? 'badge-green' : 'badge-muted'}">${escapeHtml(loc.code)}</span>
+              <span>${escapeHtml(loc.name)}</span>
+              <span style="font-size:0.72rem; color:var(--muted);">(${Number(loc.latitude).toFixed(2)}, ${Number(loc.longitude).toFixed(2)})</span>
+            </div>
+            ${samplePage ? `<div class="crt-telemetry-preview">${escapeHtml(samplePage.green_row_1)}\n${escapeHtml(samplePage.green_row_2)}</div>` : ''}
+          </div>
+          <div class="item-actions">
+            <button onclick="toggleLocation('${loc.id}', ${!loc.enabled})">${loc.enabled ? 'Disable' : 'Enable'}</button>
+            <button class="danger" onclick="deleteLocation('${loc.id}')">Remove</button>
+          </div>
+        `;
+        locContainer.appendChild(row);
+      });
+
+      // Render Radio Presets
+      const radioContainer = document.getElementById('radioList');
+      radioContainer.innerHTML = '';
+      (s.radio_presets || []).forEach(preset => {
+        const isCurrent = preset.id === s.active_radio_id;
+        const row = document.createElement('div');
+        row.className = 'item-row' + (isCurrent ? ' active-station' : '');
+        row.innerHTML = `
+          <div class="item-info">
+            <div class="item-title">
+              ${isCurrent ? '<span class="badge badge-green">ON AIR</span>' : ''}
+              <span>${escapeHtml(preset.name)}</span>
+              <span class="badge badge-muted">${escapeHtml(preset.genre || 'Radio')}</span>
+            </div>
+            <div class="item-url" title="${escapeHtml(preset.url)}">${escapeHtml(preset.url)}</div>
+          </div>
+          <div class="item-actions">
+            ${!isCurrent ? `<button class="gold" onclick="selectRadio('${preset.id}')">Tune In</button>` : ''}
+            <button class="danger" onclick="deleteRadio('${preset.id}')">Delete</button>
+          </div>
+        `;
+        radioContainer.appendChild(row);
+      });
+
+      // Render Optional Alert RSS Feeds
+      const feeds = s.rss_feeds || [];
+      document.getElementById('feedCountBadge').textContent = `${feeds.length} / ${data.max_rss_feeds}`;
+      const feedsContainer = document.getElementById('feedsList');
+      feedsContainer.innerHTML = '';
+      feeds.forEach(feed => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div class="item-info">
+            <div class="item-title">
+              <span class="badge ${feed.enabled ? 'badge-blue' : 'badge-muted'}">${escapeHtml(feed.name)}</span>
+            </div>
+            <div class="item-url">${escapeHtml(feed.url)}</div>
+          </div>
+          <div class="item-actions">
+            <button onclick="toggleFeed('${feed.id}', ${!feed.enabled})">${feed.enabled ? 'Disable' : 'Enable'}</button>
+            <button class="danger" onclick="deleteFeed('${feed.id}')">Remove</button>
+          </div>
+        `;
+        feedsContainer.appendChild(row);
+      });
+
+      // Render Live CRT Weather Pages
+      const pages = data.pages || [];
+      document.getElementById('pageCount').textContent = pages.length;
+      const pagesContainer = document.getElementById('livePagesList');
+      pagesContainer.innerHTML = '';
+      pages.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div class="item-info">
+            <div class="item-title">
+              <span class="badge badge-gold">PAGE ${idx + 1}</span>
+              <span class="badge badge-green">${escapeHtml(p.station_code)}</span>
+              <span>${escapeHtml(p.city_name)} — ${escapeHtml(p.page_type)}</span>
+            </div>
+            <div style="font-size:0.76rem; color:#93c5fd; margin-top:4px; white-space:pre-line;">${escapeHtml((p.blue_lines || []).slice(0, 3).join('\n'))}</div>
+          </div>
+        `;
+        pagesContainer.appendChild(row);
+      });
+
+      // Populate Video Settings
+      document.getElementById('vidPreset').value = v.preset || '720p';
+      document.getElementById('vidWidth').value = v.width || 1280;
+      document.getElementById('vidHeight').value = v.height || 720;
+      document.getElementById('vidFps').value = String(v.fps || 15);
+      document.getElementById('vidBitrate').value = v.video_bitrate || '1100k';
+      updateBandwidthEstimate();
+
+      // Populate Display Settings
+      const d = s.display || {};
+      document.getElementById('dispChannelName').value = d.channel_name || '';
+      document.getElementById('dispChannelNum').value = d.channel_number || '';
+      document.getElementById('dispSubheader').value = d.subheader_text || '';
+      document.getElementById('dispFooter').value = d.footer_text || '';
+      document.getElementById('dispPageDur').value = d.page_duration || 14;
+      document.getElementById('dispTypeDur').value = d.typewriter_duration || 5;
+      document.getElementById('dispBezel').checked = d.crt_bezel !== false;
+      document.getElementById('dispScanlines').checked = d.scanlines !== false;
+      document.getElementById('dispNoise').checked = d.crt_noise !== false;
+    }
+
+    async function setUnits(units) {
+      const res = await fetch('/api/units', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ units }),
+      });
+      if (res.ok) {
+        showToast(`Switched weather telemetry units to ${units.toUpperCase()}`);
+        await loadState();
+      }
+    }
+
+    async function addLocation(e) {
+      e.preventDefault();
+      const name = document.getElementById('locName').value.trim();
+      const code = document.getElementById('locCode').value.trim();
+      const latRaw = document.getElementById('locLat').value;
+      const lonRaw = document.getElementById('locLon').value;
+      const payload = {
+        name,
+        code: code || null,
+        latitude: latRaw !== '' ? parseFloat(latRaw) : null,
+        longitude: lonRaw !== '' ? parseFloat(lonRaw) : null,
+        enabled: true,
+      };
+      const res = await fetch('/api/locations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.detail || 'Could not add city');
+        return;
+      }
+      document.getElementById('locName').value = '';
+      document.getElementById('locCode').value = '';
+      document.getElementById('locLat').value = '';
+      document.getElementById('locLon').value = '';
+      showToast('Weather station added & live forecast polled!');
+      renderState(data);
+    }
+
+    async function toggleLocation(id, enabled) {
+      const res = await fetch(`/api/locations/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled }),
+      });
+      if (res.ok) {
+        renderState(await res.json());
+      }
+    }
+
+    async function deleteLocation(id) {
+      const res = await fetch(`/api/locations/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        showToast('Weather station removed');
+        renderState(await res.json());
+      }
+    }
+
+    async function addRadioPreset(e) {
+      e.preventDefault();
+      const name = document.getElementById('radioName').value.trim();
+      const genre = document.getElementById('radioGenre').value.trim() || 'Live Radio';
+      const url = document.getElementById('radioUrl').value.trim();
+      const res = await fetch('/api/radio/presets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, genre, url, make_active: true }),
+      });
+      if (res.ok) {
+        document.getElementById('radioName').value = '';
+        document.getElementById('radioGenre').value = '';
+        document.getElementById('radioUrl').value = '';
+        showToast('Radio preset added & tuned in!');
+        await loadState();
+      }
+    }
+
+    async function selectRadio(preset_id) {
+      const res = await fetch('/api/radio/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ preset_id }),
+      });
+      if (res.ok) {
+        showToast('Switching live broadcast audio feed...');
+        await loadState();
+      }
+    }
+
+    async function deleteRadio(id) {
+      const res = await fetch(`/api/radio/presets/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        showToast('Radio preset deleted');
+        await loadState();
+      }
+    }
+
+    async function addFeed(e) {
+      e.preventDefault();
+      const name = document.getElementById('feedName').value.trim();
+      const url = document.getElementById('feedUrl').value.trim();
+      const res = await fetch('/api/feeds', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, url, enabled: true }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.detail || 'Failed to add RSS feed');
+        return;
+      }
+      document.getElementById('feedName').value = '';
+      document.getElementById('feedUrl').value = '';
+      showToast('Weather alert RSS feed added');
+      renderState(data);
+    }
+
+    async function toggleFeed(id, enabled) {
+      const res = await fetch(`/api/feeds/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled }),
+      });
+      if (res.ok) renderState(await res.json());
+    }
+
+    async function deleteFeed(id) {
+      const res = await fetch(`/api/feeds/${id}`, { method: 'DELETE' });
+      if (res.ok) renderState(await res.json());
+    }
+
+    function applyVideoPreset(preset, width, height, fps, bitrate) {
+      document.getElementById('vidPreset').value = preset;
+      document.getElementById('vidWidth').value = width;
+      document.getElementById('vidHeight').value = height;
+      document.getElementById('vidFps').value = String(fps);
+      document.getElementById('vidBitrate').value = bitrate;
+      updateBandwidthEstimate();
+    }
+
+    function updateBandwidthEstimate() {
+      const w = parseInt(document.getElementById('vidWidth').value || '1280', 10);
+      const h = parseInt(document.getElementById('vidHeight').value || '720', 10);
+      const fps = parseInt(document.getElementById('vidFps').value || '15', 10);
+      const brStr = document.getElementById('vidBitrate').value || '1100k';
+      const vKbps = parseInt(brStr.replace('k', ''), 10) || 1100;
+      const totalMbps = ((vKbps + 128) / 1000).toFixed(2);
+      const gbPerHour = (((vKbps + 128) * 3600) / 8 / 1024 / 1024).toFixed(2);
+      document.getElementById('bandwidthEstimateBox').innerHTML = `
+        <strong>Active Profile:</strong> ${w}×${h} @ ${fps} fps (${vKbps}k video + 128k AAC audio)<br/>
+        <strong>Stream Bandwidth:</strong> ~${totalMbps} Mbps (~${gbPerHour} GB/hour when watched)
+      `;
+    }
+
+    async function saveVideoSettings(e) {
+      e.preventDefault();
+      const payload = {
+        preset: document.getElementById('vidPreset').value || 'custom',
+        width: parseInt(document.getElementById('vidWidth').value, 10),
+        height: parseInt(document.getElementById('vidHeight').value, 10),
+        fps: parseInt(document.getElementById('vidFps').value, 10),
+        video_bitrate: document.getElementById('vidBitrate').value,
+      };
+      const res = await fetch('/api/video', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        showToast('Resolution updated! Restarting FFmpeg encoder...');
+        await loadState();
+        setTimeout(() => initHlsMonitor(), 2500);
+      }
+    }
+
+    async function saveDisplaySettings(e) {
+      e.preventDefault();
+      const payload = {
+        channel_name: document.getElementById('dispChannelName').value.trim(),
+        channel_number: document.getElementById('dispChannelNum').value.trim(),
+        subheader_text: document.getElementById('dispSubheader').value.trim(),
+        footer_text: document.getElementById('dispFooter').value,
+        page_duration: parseInt(document.getElementById('dispPageDur').value, 10),
+        typewriter_duration: parseInt(document.getElementById('dispTypeDur').value, 10),
+        crt_bezel: document.getElementById('dispBezel').checked,
+        scanlines: document.getElementById('dispScanlines').checked,
+        crt_noise: document.getElementById('dispNoise').checked,
+      };
+      const res = await fetch('/api/display', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        showToast('CRT & band display settings applied immediately!');
+        await loadState();
+      }
+    }
+
+    async function saveCredentials(e) {
+      e.preventDefault();
+      const payload = {
+        current_password: document.getElementById('secCurrentPass').value,
+        new_username: document.getElementById('secNewUser').value.trim(),
+        new_password: document.getElementById('secNewPass').value,
+      };
+      const res = await fetch('/api/auth/credentials', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.detail || 'Password update failed');
+        return;
+      }
+      document.getElementById('secCurrentPass').value = '';
+      document.getElementById('secNewPass').value = '';
+      showToast(`Credentials updated for operator "${data.username}"`);
+    }
+
+    async function forceRefreshWeather() {
+      const res = await fetch('/api/weather/refresh', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        showToast(`Polled live weather (${data.page_count} CRT pages active)`);
+        await loadState();
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    populateStreamUrls();
+    initHlsMonitor();
+    checkAuthAndLoad();
+  </script>
+</body>
+</html>

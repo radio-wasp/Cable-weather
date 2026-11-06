@@ -1,0 +1,30 @@
+services:
+  retro-weather-hls:
+    build: .
+    container_name: retro-weather-hls
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8082}:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - TZ=${TZ:-America/Halifax}
+      - PORT=8080
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-cable10}
+      - CHANNEL_NUMBER=${CHANNEL_NUMBER:-12}
+      - CHANNEL_NAME=${CHANNEL_NAME:-RETRO WEATHER WIRE}
+      - SUBHEADER_TEXT=${SUBHEADER_TEXT:-ENVIRONMENT CANADA WEATHER WIRE}
+      - FOOTER_TEXT=${FOOTER_TEXT:-}
+      - WEATHER_UNITS=${WEATHER_UNITS:-metric}
+      - AUDIO_STREAM_URL=${AUDIO_STREAM_URL:-https://chi-master3-entry1.leanstream-hd.com:2113/CKULFM}
+      - VIDEO_WIDTH=${VIDEO_WIDTH:-1280}
+      - VIDEO_HEIGHT=${VIDEO_HEIGHT:-720}
+      - VIDEO_FPS=${VIDEO_FPS:-15}
+      - VIDEO_BITRATE=${VIDEO_BITRATE:-1100k}
+      - AUDIO_BITRATE=${AUDIO_BITRATE:-128k}
+      - PAGE_DURATION_SEC=${PAGE_DURATION_SEC:-14}
+      - TYPEWRITER_DURATION_SEC=${TYPEWRITER_DURATION_SEC:-5}
+      - WEATHER_REFRESH_SEC=${WEATHER_REFRESH_SEC:-600}
+    tmpfs:
+      - /tmp/hls:size=128m
